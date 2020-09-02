@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import TopbarComponents from '../global_components/Topbar'
+// import TopbarComponents from '../global_components/Topbar'
 import SearchTabComponent from '../global_components/SearchTab'
 import SortBarComponent from '../global_components/SortBar'
 
@@ -25,7 +25,7 @@ export default class Home extends Component {
         return (
             <React.Fragment>
                 <center>
-                    <TopbarComponents topbarText = {this.state.TopbarText} />
+                    {/* <TopbarComponents topbarText = {this.state.TopbarText} /> */}
                     <div className='main-banner'>
                         <img src={require('../assets/image/banner.jpg')} style={{ width: '-webkit-fill-available' }}/>
                         {/* <button onClick={() => this.loadData()}>Load More</button> */}

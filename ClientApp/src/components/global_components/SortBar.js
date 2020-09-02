@@ -6,10 +6,10 @@ export default class SortBar extends Component {
         return (
             <React.Fragment>
                 <div className='form-control'>
-                    <div className='text-left'>
-                        {this.props.textHeadSort}
-                        <button type="button" className="btn btn-light"><img width='10px' height='10px' src={require('../assets/image/list_icon_unactive.png')} /></button>
-                        <button type="button" className="btn btn-light"><img width='10px' height='10px'  src={require('../assets/image/grid_icon_unactive.png')} /></button>
+                    <div className='d-flex'>
+                        <div className='mr-auto p-2'>{this.props.textHeadSort}</div>
+                        <div><button type="button" className="btn btn-light p-2"><img width='15px' height='10px' src={require('../assets/image/list_icon_unactive.png')} /></button></div>
+                        <div><button type="button" className="btn btn-light p-2"><img width='15px' height='10px'  src={require('../assets/image/grid_icon_unactive.png')} /></button></div>
                         {/* <img className='button' src={require('../assets/image/list_icon_unactive.png')} /> */}
                     </div>
                 </div>
