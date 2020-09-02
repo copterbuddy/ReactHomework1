@@ -5,20 +5,16 @@ import SortBarComponent from '../global_components/SortBar'
 
 export default class Home extends Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
             TopbarText: 'H.I.S Service',
-            textHeadSort: 'สินค้าทั้งหมด'
+            typeSort: 'List'
         }
     }
 
-    loadData(){
-        this.setState({TopbarText: 'อิ้อิ้'});
-    }
-
-    textSortHeadReload(){
-        this.setState({textHeadSort: 'สินค้าทั้งหมด'});
+    loadData() {
+        this.setState({ TopbarText: 'อิ้อิ้' });
     }
 
     render() {
@@ -27,11 +23,19 @@ export default class Home extends Component {
                 <center>
                     {/* <TopbarComponents topbarText = {this.state.TopbarText} /> */}
                     <div className='main-banner'>
-                        <img src={require('../assets/image/banner.jpg')} style={{ width: '-webkit-fill-available' }}/>
+                        <img src={require('../assets/image/banner3.jpg')} style={{ width: '-webkit-fill-available' }} />
                         {/* <button onClick={() => this.loadData()}>Load More</button> */}
                     </div>
-                    <SearchTabComponent topbarText = {this.state.TopbarText} />
-                    <SortBarComponent textHeadSort = {this.state.textHeadSort} />
+                    <SearchTabComponent
+                        topbarText={this.state.TopbarText} />
+                    <SortBarComponent
+                        textHeadSort={'สินค้าทั้งหมด'}
+                        typeSort={this.state.typeSort}
+
+                    />
+
+                    <div>{this.state.typeSort}</div>
+
                 </center>
             </React.Fragment>
         )
