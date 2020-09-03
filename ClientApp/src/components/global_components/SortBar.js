@@ -49,7 +49,7 @@ export default class SortBar extends Component {
                         </div>
                     </div>
 
-                    {this.props.typeSort}
+                    {/* {this.props.typeSort} */}
                 </div>
             </React.Fragment>
         )
