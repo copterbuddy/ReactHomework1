@@ -8,30 +8,41 @@ export default class Home extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            TopbarText: 'H.I.S Service',
+            topBarSrc: require('../assets/image/banner3.jpg'),
             typeSort: 'List'
         }
+        // bind callback ที่ใช้
+        this.getDataCallback = this.getDataCallback.bind(this)
     }
 
-    loadData() {
-        this.setState({ TopbarText: 'อิ้อิ้' });
+    getDataCallback(sort){
+        if(this.state.typeSort != sort){
+            sort == "List" ? 
+            this.setState({topBarSrc: require('../assets/image/banner3.jpg')}) :
+            this.setState({topBarSrc: require('../assets/image/banner.jpg')})
+        }
+        this.setState({ typeSort: sort });
+
+        
     }
+
+   
 
     render() {
+        // const {post} = this.props
         return (
             <React.Fragment>
                 <center>
                     {/* <TopbarComponents topbarText = {this.state.TopbarText} /> */}
                     <div className='main-banner'>
-                        <img src={require('../assets/image/banner3.jpg')} style={{ width: '-webkit-fill-available' }} />
+                        <img src={this.state.topBarSrc} style={{ width: '-webkit-fill-available' }} />
                         {/* <button onClick={() => this.loadData()}>Load More</button> */}
                     </div>
                     <SearchTabComponent
                         topbarText={this.state.TopbarText} />
                     <SortBarComponent
                         textHeadSort={'สินค้าทั้งหมด'}
-                        typeSort={this.state.typeSort}
-
+                        sortCallback={this.getDataCallback}
                     />
 
                     <div>{this.state.typeSort}</div>
