@@ -354,7 +354,7 @@
     font-weight: 1000;
 }
 
-/* @media (max-width: 800px){
+@media (max-width: 800px){
     .productlist-products{
         grid-template-columns: repeat(3, 1fr);
     }
@@ -370,4 +370,4 @@
     .productlist-products{
         grid-template-columns: repeat(1, 1fr);
     }
-} */
+}
