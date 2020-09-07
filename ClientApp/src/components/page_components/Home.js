@@ -185,22 +185,26 @@ export default class Home extends Component {
                             <img src={this.state.topBarSrc} style={{ width: '-webkit-fill-available' }} />
                         </div>
 
+                        <div className='mt-3'>
                         <SearchTabComponent
                             topbarText={this.state.TopbarText}
                             txtSearch={this.getTxtCallback}
                         />
+                        </div>
 
+                        <div className='mt-3'>
                         <SortBarComponent
-                            className='mt-2'
                             textHeadSort={'สินค้าทั้งหมด(' + products.length + ')'}
                             sortCallback={this.getTypeSortCallback}
                         />
+                        </div>
 
+                        <div className='mt-2'>
                         {products.length === 0 ? <h3>{this.state.txtNoData}</h3>
                             :
                             <React.Fragment>
                                 <div
-                                    className={"mt-2 "+allProductSort}
+                                    className={"mt-4 "+allProductSort}
                                     // style={{ borderWidth : '2px'}}>
                                     style={{ gridTemplateColumns: screenWidth <= 500 }}>
                                     {products.map(({
@@ -232,6 +236,7 @@ export default class Home extends Component {
                                 </div>
                             </React.Fragment>
                         }
+                        </div>
                     </div>
                 {/* </center> */}
             </React.Fragment>
