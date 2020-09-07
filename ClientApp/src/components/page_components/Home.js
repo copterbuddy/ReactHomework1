@@ -10,7 +10,7 @@ export default class Home extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            topTxt = 'H.I.S. Service',
+            topTxt : 'H.I.S. Service',
             topBarSrc: require('../assets/image/banner3.jpg'),
             typeSort: 'List',
             txtSearch: '',
