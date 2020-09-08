@@ -465,3 +465,9 @@
     font-weight: bold;
     line-height: 0.88;
 }
+
+.glyphicon {
+    font-size: 25px;
+    /* display: block; */
+    /* text-align: center; */
+  }
