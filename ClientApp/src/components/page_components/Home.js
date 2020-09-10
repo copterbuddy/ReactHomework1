@@ -1,11 +1,22 @@
+//components
 import React, { Component } from 'react'
 import TopbarComponents from '../global_components/Topbar'
 import SearchTabComponent from '../global_components/SearchTab'
 import SortBarComponent from '../global_components/SortBar'
+
+//call api
 import axios from 'axios';
+
+//jquery
 import $ from 'jquery'
 
-export default class Home extends Component {
+//redux
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux'
+import * as pageAction from '../../actions/page-action'
+import * as productAction from '../../actions/product-action'
+
+class Home extends Component {
 
     constructor(props) {
         super(props);
@@ -67,7 +78,15 @@ export default class Home extends Component {
         $(document).ready(function () {
             $('body').css('background', 'white');
         });
+        this.props.pageAction.setPageID(1)
         this.loadData('');
+
+    }
+
+    OnClickChooseProduct = (products, productID) => {
+        // this.props.productAction.setProductList(products);
+        this.props.productAction.setProductID(productID);
+        this.props.history.push('../product-detail');
     }
 
     async loadData(txtSearch) {
@@ -86,7 +105,6 @@ export default class Home extends Component {
             }
         }).then(response => {
             if (response.data !== null) {
-                console.log('response :', response)
                 if (this.state.round === 0) {
                     this.setState({ JsonResponse: response.data.products, index: 1, round: 1 });
                 }
@@ -219,7 +237,7 @@ export default class Home extends Component {
                                         ProductImgURL_TH,
                                         SKU_ID
                                     }) =>
-                                        <div key={ProductID}>
+                                        <div key={ProductID}  onClick={() => { this.OnClickChooseProduct(products, ProductID) }} >
                                             <div className={productSort}>
                                                 <div className={allImageSort}>
                                                     <img src={ProductNameTH.includes("Test") ? defPic : ProductImgURL_TH}  />
@@ -244,3 +262,14 @@ export default class Home extends Component {
         )
     }
 }
+
+const mapStateToProps = state => ({
+    Product: state.Product
+})
+
+const mapDispatchToProps = dispatch => ({
+    productAction: bindActionCreators(productAction, dispatch),
+    pageAction: bindActionCreators(pageAction, dispatch)
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

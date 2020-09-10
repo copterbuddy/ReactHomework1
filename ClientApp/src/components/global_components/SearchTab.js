@@ -44,7 +44,7 @@ export default class SearchTab extends Component {
                 <div className="input-group flex-nowrap myCenterInput">
                     <div className="input-group-prepend">
                         <div className='myCenterInput'>
-                            <span className="input-group-text glyphicon glyphicon-search myCenterSpan" id="addon-wrapping"></span>
+                            <span className="input-group-text glyphicon glyphicon-search myCenterSpan myGlyphicon" id="addon-wrapping"></span>
                         </div>
                         {/* <span className="input-group-text" id="addon-wrapping">{'-->'}</span> */}
                         <input type="search"
