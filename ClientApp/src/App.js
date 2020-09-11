@@ -4,6 +4,7 @@ import { Route, Switch } from 'react-router';
 import Home from './components/page_components/Home';
 import ProductDetail from './components/page_components/ProductDetail'
 import SkuSummaryComponent from './components/page_components/SkuSummary';
+import SkuAddressComponent from './components/page_components/SkuAddress'
 
 //script
 import './components/assets/index.css'
@@ -19,6 +20,7 @@ class App extends React.Component {
         <Route exact path='/' component={Home} ></Route>
         <Route exact path='/product-detail' component={ProductDetail} ></Route>
         <Route exact path='/sku-summary' component={SkuSummaryComponent} ></Route>
+        <Route exact path='/sku-address' component={SkuAddressComponent} ></Route>
       </Switch>
     );
   }

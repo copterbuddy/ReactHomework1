@@ -87,8 +87,7 @@ class ProductDetail extends Component {
     }
 
     render() {
-        const productList = this.props.Product.productList;
-        const productId = this.props.Product.productID;
+        const productList = this.props.Product.productList[0];
         // let index = 0
 
         // for (let i = 0; i < productList.length; i++) {
@@ -104,75 +103,75 @@ class ProductDetail extends Component {
                 <div>
                     <TopbarComponents></TopbarComponents>
                     <div className="button-row">
-                            {/* onClick="location.href='sku-summary.html'" อยู่ใน button */}
-                            <button className="button-primary" onClick={() => this.OnClickGoToSummary()}>
-                                เลือกสินค้า
+                        {/* onClick="location.href='sku-summary.html'" อยู่ใน button */}
+                        <button className="button-primary" onClick={() => this.OnClickGoToSummary()}>
+                            เลือกสินค้า
                     </button>
                     </div>
-                    {productList.length === 0 ? <h3>ไม่พบสินค้า</h3>
+                    {this.props.Product.productList.length === 0 ? <h3>ไม่พบสินค้า</h3>
                         :
                         <React.Fragment>
                             <div>
-                                {productList.map(() =>
-                                    <div key={productList[0].ProductID} className="content">
 
-                                        <div className="sku-product-header">
+                                <div key={productList.ProductID} className="content">
 
-                                            <div className="sku-product-slider">
-                                                <div>
-                                                    <img src={productList[0].ProductImgURL_TH} />
-                                                </div>
+                                    <div className="sku-product-header">
+
+                                        <div className="sku-product-slider">
+                                            <div>
+                                                <img src={productList.ProductImgURL_TH} />
                                             </div>
-
                                         </div>
 
-                                        <div className="sku-product-data">
-                                            <div className="sku-product-title">
-                                                {productList[0].ProductNameTH}
-                                            </div>
+                                    </div>
 
-                                            <div className="sku-product-price">
-                                                {productList[0].Price} บาท
+                                    <div className="sku-product-data">
+                                        <div className="sku-product-title">
+                                            {productList.ProductNameTH}
+                                        </div>
+
+                                        <div className="sku-product-price">
+                                            {productList.Price} บาท
                             </div>
 
-                                            <div className="sku-product-remark">
-                                                <span style={{
-                                                    color: '#00a6ff',
-                                                    fontSize: '8px',
-                                                    fontWeight: '500',
-                                                    letterSpacing: '-0.2px',
-                                                    backgroundColor: '#E3F6FF',
-                                                    padding: '2px 4px',
-                                                    borderRadius: '1px'
-                                                }}>
-                                                    * ใช้เวลาดำเนินการ 5-7 วัน หลังจากชำระเงิน
+                                        <div className="sku-product-remark">
+                                            <span style={{
+                                                color: '#00a6ff',
+                                                fontSize: '8px',
+                                                fontWeight: '500',
+                                                letterSpacing: '-0.2px',
+                                                backgroundColor: '#E3F6FF',
+                                                padding: '2px 4px',
+                                                borderRadius: '1px'
+                                            }}>
+                                                * ใช้เวลาดำเนินการ 5-7 วัน หลังจากชำระเงิน
                                 </span>
-                                            </div>
-
-                                            <div className="sku-product-remark">
-                                                <span style={{
-                                                    color: '#15dcab',
-                                                    fontSize: '8px',
-                                                    fontWeight: '500',
-                                                    letterSpacing: '-0.2px',
-                                                    backgroundColor: '#E8FCF7',
-                                                    padding: '2px 4px',
-                                                    borderRadius: '1px'
-                                                }}>
-                                                    <img src={require("../assets/images/sku-icon-truck@2x.png")} style={{
-                                                        height: '17px',
-                                                        verticalAlign: 'middle'
-                                                    }} /> ฟรี! ค่าจัดส่ง
-                                </span>
-                                            </div>
                                         </div>
 
-                                        <div className="sku-product-detail">
+                                        <div className="sku-product-remark">
+                                            <span style={{
+                                                color: '#15dcab',
+                                                fontSize: '8px',
+                                                fontWeight: '500',
+                                                letterSpacing: '-0.2px',
+                                                backgroundColor: '#E8FCF7',
+                                                padding: '2px 4px',
+                                                borderRadius: '1px'
+                                            }}>
+                                                <img src={require("../assets/images/sku-icon-truck@2x.png")} style={{
+                                                    height: '17px',
+                                                    verticalAlign: 'middle'
+                                                }} /> ฟรี! ค่าจัดส่ง
+                                </span>
+                                        </div>
+                                    </div>
 
-                                            <div className="sku-product-detail-title">รายละเอียดสินค้า</div>
+                                    <div className="sku-product-detail">
 
-                                            <div className="sku-product-detail-content">
-                                                {/* <strong>ประเภทบัตร : 1 วัน ระบุวันเข้าสวนสนุก</strong><br />
+                                        <div className="sku-product-detail-title">รายละเอียดสินค้า</div>
+
+                                        <div className="sku-product-detail-content">
+                                            {/* <strong>ประเภทบัตร : 1 วัน ระบุวันเข้าสวนสนุก</strong><br />
                                         - ท่านจำเป็นต้องระบุวันและสถานที่เข้า จึงจะรับประกันการ
                                         เข้าสวนสนุก<br />
                                         - สามารถออก E-Ticket ได้ภายใน 90 วันนับจากวันที่สั่งซื้อ
@@ -187,13 +186,13 @@ class ProductDetail extends Component {
                                         * หมายเหตุ เมื่อออกบัตรให้เรียบร้อยแล้ว ไม่สามารถ
                                         เปลี่ยนแปลงได้อีก */}
 
-                                                <p dangerouslySetInnerHTML={{ __html: productList[0].ProductDescTH }} />
-                                            </div>
-
+                                            <p dangerouslySetInnerHTML={{ __html: productList.ProductDescTH }} />
                                         </div>
 
                                     </div>
-                                )}
+
+                                </div>
+
                             </div>
                         </React.Fragment>
                     }

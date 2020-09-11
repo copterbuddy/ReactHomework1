@@ -12,6 +12,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 class SkuSummary extends Component {
+    
 
     componentDidMount() {
         this.props.pageAction.setPageID(3);
@@ -19,15 +20,21 @@ class SkuSummary extends Component {
         // this.loadData()
     }
 
+    onClickToAddress = () => {
+        this.props.history.push('../sku-address');
+    }
+
+    
+
     render() {
         return (
             <React.Fragment>
                 <div>
                     <TopbarComponents></TopbarComponents>
                     <div className="major-navbar">
-                        <div className="navbar-title">
+                        {/* <div className=' navbar-title'> */}
                             สรุปรายการ
-                </div>
+                        {/* </div> */}
                     </div>
                     <div className="button-row">
                         <a href="sku-summary.html">
@@ -41,12 +48,12 @@ class SkuSummary extends Component {
                         <div className="pizza-address-card">
                             <div className="pizza-address-card-icon"></div>
                             <div className="pizza-address-card-name">
-                                นลิดา สมวัน
-                    </div>
-                            <a href="sku-address.html">
+                                ระบุที่อยู่จัดส่ง
+                        </div>
+                            <a  onClick={() => {this.onClickToAddress()}}>
                                 <div className="pizza-address-card-action">
                                     เลือกที่อยู่อื่น
-                        </div>
+                                </div>
                             </a>
                             <div className="pizza-address-card-mobile">
                                 099 999 9999

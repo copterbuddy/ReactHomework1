@@ -9,6 +9,9 @@ export default class Action{
     //Page Management
     static Set_Page_ID = 'Set-Page-ID'
 
+    //Customer Management
+    static Set_Customer_Data = 'Set-Customer-Data'
+
     //Api Management
     static Get_All_Products = 'Get-All-Products'
 }
