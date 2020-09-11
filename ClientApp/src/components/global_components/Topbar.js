@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { bindActionCreators } from 'redux'
 import * as productAction from '../../actions/product-action'
+import * as pageAction from '../../actions/page-action'
 
 class Topbar extends Component {
 

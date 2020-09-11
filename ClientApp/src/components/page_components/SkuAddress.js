@@ -30,10 +30,16 @@ class SkuAddress extends Component {
             District: [],
             SubDistrict: [],
             ZipCode: [],
+
+            InputName: '',
+            InputTel: '',
+            InputEmail: '',
             InputProvince: '',
             InputDistrict: '',
             InputSubDistrict: '',
             InputZipCode: '',
+            InputAddress: '',
+            InputDesc: '',
         }
 
     }
@@ -84,7 +90,6 @@ class SkuAddress extends Component {
             .catch(function (error) {
                 console.log("loadData Error", error);
             });
-        console.log('Response Obj :', this.state.Province, '|| TypeAddress: ' + typeAddress)
     }
 
     isSetState(typeAddress, value) {
@@ -165,7 +170,7 @@ class SkuAddress extends Component {
                         "DistrictNameEN": response.data.districts[i].DistrictNameEN,
                     });
                 }
-                
+
 
                 this.isSetState(typeAddress, data)
             } else {
@@ -200,7 +205,7 @@ class SkuAddress extends Component {
             }
         } else if (typeAddress === TYPEADDRESS.GETZIPCODE) {
             if (response.data.zipCode.length !== 0 && response.data.Result === true) {
-                console.log('myres: ',response)
+                console.log('myres: ', response)
                 for (let i = 0; i < response.data.zipCode.length; i++) {
                     data.push({
                         "ZipCodeID": response.data.zipCode[i].ZipCodeID,
@@ -221,9 +226,48 @@ class SkuAddress extends Component {
     }
     //#endregion Call API
 
-    back(){
-        this.props.history.push('../sku-summary');
+    Submit() {
+        let isChkValidate = true
+
+        const Emailpattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        const Emailresult = Emailpattern.test(this.state.InputEmail);
+
+        const Mobilepattern = /(([0-9]{3}))*([0-9]{3})*([0-9]{4})/;
+        const Mobileresult = Mobilepattern.test(this.state.InputTel);
+
+        if (Emailresult === false) {
+            alert('รูปแบบ E-mail ไม่ถูกต้อง กรุณาใส่ข้อมูลใหม่');
+            this.setState({ InputEmail: '' });
+            isChkValidate = false
+        }
+        else if (Mobileresult === false) {
+            alert('กรุณาใส่เบอรฺ์ติดต่อเฉพาะตัวเลขให้ครบ 10 หลัก');
+            this.setState({ InputTel: '' });
+            isChkValidate = false
+        }
+        else if (this.state.InputTel.substring(0, 1) !== '0') {
+            alert('กรุณาใส่เบอรฺ์ติดต่อเริ่มต้นด้วยเลข 0');
+            this.setState({ InputTel: '' });
+            isChkValidate = false
+        }
+        else if (this.state.InputTel.substring(0, 2) === '02') {
+            alert('ไม่สามารถใส่เบอรฺ์ติดต่อเริ่มต้นด้วยเลข 02 ได้ กรุณาใส่ข้อมูลใหม่');
+            this.setState({ InputTel: '' });
+            isChkValidate = false
+        }
+
+        //focus จาก ชื่อ ref
+        // this.nameInputRef.focus()
+        if (isChkValidate) this.props.history.push('../sku-summary');
     }
+
+    //#region GetInput
+    getName(event) { this.setState({ InputName: event.target.value }) }
+    getTel(event) { this.setState({ InputTel: event.target.value }) }
+    getEmail(event) { this.setState({ InputEmail: event.target.value }) }
+    getInputAddress(event) { this.setState({ InputAddress: event.target.value }) }
+    getDesc(event) { this.setState({ InputDesc: event.target.value }) }
+    //#endregion end GetInput
 
     render() {
         const province = this.state.Province
@@ -239,7 +283,7 @@ class SkuAddress extends Component {
                 {/* </div> */}
                 </div>
                 <div className="button-row">
-                    <a onClick={() => {this.back()}}>
+                    <a onClick={() => { this.Submit() }}>
                         <button className="button-primary">
                             ยืนยัน
                     </button>
@@ -248,13 +292,13 @@ class SkuAddress extends Component {
                 <div className="content content--scrollable">
                     <div className="pizza-address-title">ข้อมูลลูกค้า</div>
                     <div className="pizza-address-input">
-                        <input type="text" placeholder="ชื่อ - นามสกุล" />
+                        <input onChange={this.getName} ref={(input) => { this.nameInputRef = input; }} type="text" placeholder="ชื่อ - นามสกุล" />
                     </div>
                     <div className="pizza-address-input">
-                        <input type="tel" placeholder="เบอร์ติดต่อ" />
+                        <input onChange={this.getTel} ref={(input) => { this.telInputRef = input; }} type="tel" placeholder="เบอร์ติดต่อ" />
                     </div>
                     <div className="pizza-address-input">
-                        <input type="email" placeholder="อีเมล" />
+                        <input onChange={this.getEmail} ref={(input) => { this.emailInputRef = input; }} type="email" placeholder="อีเมล" />
                     </div>
                     <div className="pizza-address-title">ข้อมูลที่อยู่</div>
                     <div className="pizza-address-input" >
@@ -319,27 +363,27 @@ class SkuAddress extends Component {
                         </React.Fragment>
                     </div>
                     <div className="pizza-address-input">
-                            {zipCode.length === 0 ?
+                        {zipCode.length === 0 ?
 
-                                <select><option>รหัสไปรษณีย์</option></select>
-                                :
-                                <select >
-                                    <option>รหัสไปรษณีย์</option>
-                                    {zipCode.map(({
-                                        ZipCodeID,
-                                        ZipCode,
-                                    }) =>
-                                        <option key={ZipCodeID} value={ZipCodeID}>{ZipCode}</option>
-                                    )}
+                            <select><option>รหัสไปรษณีย์</option></select>
+                            :
+                            <select >
+                                <option>รหัสไปรษณีย์</option>
+                                {zipCode.map(({
+                                    ZipCodeID,
+                                    ZipCode,
+                                }) =>
+                                    <option key={ZipCodeID} value={ZipCodeID}>{ZipCode}</option>
+                                )}
 
-                                </select>
-                            }
+                            </select>
+                        }
                     </div>
                     <div className="pizza-address-input">
-                        <input type="text" placeholder="บ้านเลขที่" />
+                        <input onChange={this.getInputAddress} ref={(input) => { this.addressInputRef = input; }} type="text" placeholder="บ้านเลขที่" />
                     </div>
                     <div className="pizza-address-input">
-                        <textarea placeholder="อธิบายข้อมูลที่อยู่เพิ่มเติม"></textarea>
+                        <textarea onChange={this.getDesc} ref={(input) => { this.descInputRef = input; }} placeholder="อธิบายข้อมูลที่อยู่เพิ่มเติม"></textarea>
                     </div>
                 </div>
             </div>

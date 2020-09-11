@@ -3,6 +3,7 @@ export default class Action{
     //Product Management
     static Set_Product_List = 'Set-Product-List'
     static Set_Product_ID = 'Set-Product-ID'
+    static Set_Product = 'Set-Product'
     static Set_Cart_Store_Item = 'Set_Cart_Store_Item'
     static Set_Cart_Store_Status = 'Set_Cart_Store_Status'
 

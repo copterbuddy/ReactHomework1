@@ -144,7 +144,7 @@ class ProductDetail extends Component {
                                                 padding: '2px 4px',
                                                 borderRadius: '1px'
                                             }}>
-                                                * ใช้เวลาดำเนินการ 5-7 วัน หลังจากชำระเงิน
+                                                * {productList.Remark}
                                 </span>
                                         </div>
 

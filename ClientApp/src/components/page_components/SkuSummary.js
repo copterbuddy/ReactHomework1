@@ -12,21 +12,35 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 class SkuSummary extends Component {
-    
+
 
     componentDidMount() {
         this.props.pageAction.setPageID(3);
-
-        // this.loadData()
+        this.loadData()
     }
 
     onClickToAddress = () => {
         this.props.history.push('../sku-address');
     }
 
-    
+    deleteProduct = (event) => {
+        this.productAction.setProductList([])
+        event.preventDefault();
+        
+        
+    }
+
+    loadData() {
+
+    }
+
+    dontGoLink = (event) => {
+        event.preventDefault();
+    }
 
     render() {
+        const productList = this.props.Product.productList[0];//ลบแล้วใส่ข้างล่าง
+
         return (
             <React.Fragment>
                 <div>
@@ -44,13 +58,13 @@ class SkuSummary extends Component {
                         </a>
                     </div>
                     <div className="content content--scrollable">
-                        <div className="pizza-detail-title">ที่อยู่สำหรับจัดส่ง</div>
+                        <div className="pizza-detail-title" >ที่อยู่สำหรับจัดส่ง</div>
                         <div className="pizza-address-card">
                             <div className="pizza-address-card-icon"></div>
                             <div className="pizza-address-card-name">
                                 ระบุที่อยู่จัดส่ง
                         </div>
-                            <a  onClick={() => {this.onClickToAddress()}}>
+                            <a onClick={() => { this.onClickToAddress() }}>
                                 <div className="pizza-address-card-action">
                                     เลือกที่อยู่อื่น
                                 </div>
@@ -73,15 +87,19 @@ class SkuSummary extends Component {
 
                         </div>
                         <div className="pizza-detail-title">รายการสินค้า</div>
+                        {
+                            productList.Product.productID
+                        }
                         <div className="pizza-item-card">
                             <div className="pizza-item-card-head">
                                 <div className="pizza-item-card-image">
-                                    <img src="images/temp-sku-product1.jpg" />
+                                    <img src={productList.ProductImgURL_TH} />
                                 </div>
                                 <div className="pizza-item-card-title">
-                                    Tokyo Disney Resort<br />
-                            7-Day Ticket : DisneySea
-                        </div>
+                                    {/* Tokyo Disney Resort<br />
+                            7-Day Ticket : DisneySea */}
+                            {productList.ProductNameEN}
+                                </div>
                                 <div className="pizza-item-card-remarks">
                                     <span style={{
                                         color: "#00a6ff",
@@ -92,22 +110,22 @@ class SkuSummary extends Component {
                                         padding: '2px 4px',
                                         borderRadius: '1px',
                                     }}>
-                                        * ใช้เวลาดำเนินการ 5-7 วัน หลังจากชำระเงิน
+                                        * {productList.Remark}
                             </span>
                                 </div>
                                 <div className="pizza-item-card-commands">
-                                    <a className="pizza-item-card-commands-delete" href="#">ลบรายการ</a>
+                                    <a className="pizza-item-card-commands-delete" href="#" onClick={this.deleteProduct}>ลบรายการ</a>
                             |
                             <span className="pizza-item-card-commands-detail">รายละเอียดสินค้า</span>
                                 </div>
                                 <div className="pizza-item-card-total">
-                                    15,000 บาท
+                                    {productList.Price} บาท
                         </div>
                                 <div className="pizza-item-card-quantity">จำนวน 1 ชิ้น</div>
                             </div>
                             <div className="pizza-item-card-detail">
                                 <div className="pizza-item-card-detail-text">
-                                    <strong>ประเภทบัตร : 1 วัน ระบุวันเข้าสวนสนุก</strong><br />
+                                    {/* <strong>ประเภทบัตร : 1 วัน ระบุวันเข้าสวนสนุก</strong><br />
                             - ท่านจำเป็นต้องระบุวันและสถานที่เข้า จึงจะรับประกันการ
                             เข้าสวนสนุก<br />
                             - สามารถออก E-Ticket ได้ภายใน 90 วันนับจากวันที่สั่งซื้อ
@@ -120,7 +138,8 @@ class SkuSummary extends Component {
                             - จำเป็นต้องใช้บัตรนี้ในการออก Fast Pass ในสวนสนุก<br />
                                     <br />
                             * หมายเหตุ เมื่อออกบัตรให้เรียบร้อยแล้ว ไม่สามารถ
-                            เปลี่ยนแปลงได้อีก
+                            เปลี่ยนแปลงได้อีก */}
+                            <p dangerouslySetInnerHTML={{ __html: productList.ProductDescTH }} />
                         </div>
                             </div>
                         </div>
@@ -138,7 +157,7 @@ class SkuSummary extends Component {
                                     ราคาทั้งหมด
                         </div>
                                 <div className="pizza-summarybox-total">
-                                    14,900 บาท
+                                {productList.Price-100} บาท
                         </div>
                             </div>
                         </div>
@@ -150,10 +169,12 @@ class SkuSummary extends Component {
 }
 
 const mapStateToProps = state => ({
+    Product: state.Product
 })
 
 const mapDispatchToProps = dispatch => ({
     pageAction: bindActionCreators(pageAction, dispatch),
+    productAction: bindActionCreators(productAction, dispatch)
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(SkuSummary);

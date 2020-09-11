@@ -3,6 +3,7 @@ import Action from '../actions';
 var initialState = {
     productList: [],
     productID: 0,
+    product: [],
     // cartStoreItem: [],
     // cartStoreStatus: false
 };
@@ -14,6 +15,8 @@ function Product(state = initialState, action) {
             return { ...state, productList: action.ProductList };
         case Action.Set_Product_ID:
             return { ...state, productID: action.ProductID };
+        case Action.Set_Product:
+            return { ...state, product: action.Product };
         // case Action.Set_Cart_Store_Item:
         //     return { ...state, cartStoreItem: action.cartStoreItem };
         // case Action.Set_Cart_Store_Status:

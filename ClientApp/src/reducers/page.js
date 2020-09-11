@@ -9,7 +9,7 @@ function Page(state = initialState,action){
 
     switch (action.type) {
         case Action.Set_Page_ID:
-            return {...state, pageID: action.pageID};
+            return {...state, pageID: action.PageID};
         default:
             return state;
     }

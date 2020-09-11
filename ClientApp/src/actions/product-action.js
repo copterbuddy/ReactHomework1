@@ -14,6 +14,13 @@ export function setProductID(data){
     };
 }
 
+export function setProduct(data){
+    return {
+        type: Action.Set_Product,
+        Product: data
+    };
+}
+
 // export function setCartStoreItem(data){
 //     return {
 //         type: Action.Set_Cart_Store_Item,
