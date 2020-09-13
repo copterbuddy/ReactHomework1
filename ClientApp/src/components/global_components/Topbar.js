@@ -16,7 +16,9 @@ class Topbar extends Component {
                 <div className='navbar' style={{
                     margin: "0px"
                 }}>
-                    <div className=' navbar-title'>
+                    <div className=' navbar-title' style={{
+                        color: "white"
+                        }}>
                         {
                             pageID === 1 ? null :
                             <div className="navbar-back" onClick={() => { this.props.history.goBack() }}></div>

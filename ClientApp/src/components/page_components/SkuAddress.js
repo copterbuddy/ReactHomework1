@@ -8,7 +8,7 @@ import axios from 'axios';
 //redux
 import * as pageAction from '../../actions/page-action'
 import * as productAction from '../../actions/product-action'
-import * as custAction from '../../actions/customer-action'
+import * as customerAction from '../../actions/customer-action'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
@@ -31,6 +31,10 @@ class SkuAddress extends Component {
             SubDistrict: [],
             ZipCode: [],
 
+            InputProvinceId: '',
+            InputDistrictId: '',
+            InputSubDistrictId: '',
+
             InputName: '',
             InputTel: '',
             InputEmail: '',
@@ -41,29 +45,70 @@ class SkuAddress extends Component {
             InputAddress: '',
             InputDesc: '',
         }
-
+        this.Submit = this.Submit.bind(this)
     }
 
     componentDidMount() {
+        this.props.pageAction.setPageID(4);
         this.loadData(TYPEADDRESS.GETPROVINCE, '', '', '');
     }
 
     GetDistrict = (event) => {
+        //getId
         const provinceId = event.target.value;
-        this.setState({ InputProvince: provinceId })
+
+        //getName
+        var index = event.nativeEvent.target.selectedIndex;
+        const provinceName = event.nativeEvent.target[index].text
+
+        
+        this.setState({ 
+            InputProvinceId: provinceId,
+            InputProvince: provinceName
+         })
+
+
         this.loadData(TYPEADDRESS.GETDISTRICT, provinceId, '', '')
     }
 
     GetSubDistrict = (event) => {
+        //getId
         const districtId = event.target.value;
-        this.setState({ InputDistrict: districtId })
+        //getName
+        var index = event.nativeEvent.target.selectedIndex;
+        const districteName = event.nativeEvent.target[index].text
+
+        this.setState({ 
+            InputDistrictId: districtId,
+            InputDistrict: districteName
+         })
+
         this.loadData(TYPEADDRESS.GETSUBDISTRICT, '', districtId, '')
     }
 
     GetZipCode = (event) => {
+        //getId
         const subDistrictId = event.target.value;
-        this.setState({ InputSubDistrict: subDistrictId })
-        this.loadData(TYPEADDRESS.GETZIPCODE, this.state.InputProvince, this.state.InputDistrict, subDistrictId)
+        //getName
+        var index = event.nativeEvent.target.selectedIndex;
+        const subDistrictName = event.nativeEvent.target[index].text
+
+        this.setState({ 
+            InputSubDistrictId: subDistrictId,
+            InputSubDistrict: subDistrictName
+         })
+
+        this.loadData(TYPEADDRESS.GETZIPCODE, this.state.InputProvinceId, this.state.InputDistrictId, subDistrictId)
+    }
+    
+    GetAll = (event) => {
+        //getName
+        var index = event.nativeEvent.target.selectedIndex;
+        const zipCode = event.nativeEvent.target[index].text
+
+        this.setState({ 
+            InputZipCode: zipCode
+         })
     }
 
     //#region Call API
@@ -94,9 +139,9 @@ class SkuAddress extends Component {
 
     isSetState(typeAddress, value) {
         if (typeAddress === TYPEADDRESS.GETPROVINCE) this.setState({ Province: value })
-        if (typeAddress === TYPEADDRESS.GETDISTRICT) this.setState({ District: value })
-        if (typeAddress === TYPEADDRESS.GETSUBDISTRICT) this.setState({ SubDistrict: value })
-        if (typeAddress === TYPEADDRESS.GETZIPCODE) this.setState({ ZipCode: value })
+        else if (typeAddress === TYPEADDRESS.GETDISTRICT) this.setState({ District: value })
+        else if (typeAddress === TYPEADDRESS.GETSUBDISTRICT) this.setState({ SubDistrict: value })
+        else if (typeAddress === TYPEADDRESS.GETZIPCODE) this.setState({ ZipCode: value })
     }
 
     isGetBody(typeAddress, provinceCode, districtCode, subDistrictCode) {
@@ -151,7 +196,6 @@ class SkuAddress extends Component {
                         "Status": response.data.provinces[i].Status,
                     });
                 }
-
                 this.isSetState(typeAddress, data)
             } else {
                 console.log('response null :', response)
@@ -205,7 +249,6 @@ class SkuAddress extends Component {
             }
         } else if (typeAddress === TYPEADDRESS.GETZIPCODE) {
             if (response.data.zipCode.length !== 0 && response.data.Result === true) {
-                console.log('myres: ', response)
                 for (let i = 0; i < response.data.zipCode.length; i++) {
                     data.push({
                         "ZipCodeID": response.data.zipCode[i].ZipCodeID,
@@ -226,47 +269,64 @@ class SkuAddress extends Component {
     }
     //#endregion Call API
 
-    Submit() {
+    Submit(){
         let isChkValidate = true
 
-        const Emailpattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        const Emailresult = Emailpattern.test(this.state.InputEmail);
+        // const Emailpattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        // const Emailresult = Emailpattern.test(this.state.InputEmail);
 
-        const Mobilepattern = /(([0-9]{3}))*([0-9]{3})*([0-9]{4})/;
-        const Mobileresult = Mobilepattern.test(this.state.InputTel);
+        // const Mobilepattern = /(([0-9]{3}))*([0-9]{3})*([0-9]{4})/;
+        // const Mobileresult = Mobilepattern.test(this.state.InputTel);
 
-        if (Emailresult === false) {
-            alert('รูปแบบ E-mail ไม่ถูกต้อง กรุณาใส่ข้อมูลใหม่');
-            this.setState({ InputEmail: '' });
-            isChkValidate = false
-        }
-        else if (Mobileresult === false) {
-            alert('กรุณาใส่เบอรฺ์ติดต่อเฉพาะตัวเลขให้ครบ 10 หลัก');
-            this.setState({ InputTel: '' });
-            isChkValidate = false
-        }
-        else if (this.state.InputTel.substring(0, 1) !== '0') {
-            alert('กรุณาใส่เบอรฺ์ติดต่อเริ่มต้นด้วยเลข 0');
-            this.setState({ InputTel: '' });
-            isChkValidate = false
-        }
-        else if (this.state.InputTel.substring(0, 2) === '02') {
-            alert('ไม่สามารถใส่เบอรฺ์ติดต่อเริ่มต้นด้วยเลข 02 ได้ กรุณาใส่ข้อมูลใหม่');
-            this.setState({ InputTel: '' });
-            isChkValidate = false
-        }
+        // if (Emailresult === false) {
+        //     alert('รูปแบบ E-mail ไม่ถูกต้อง กรุณาใส่ข้อมูลใหม่');
+        //     this.setState({ InputEmail: '' });
+        //     isChkValidate = false
+        // }
+        // else if (Mobileresult === false) {
+        //     alert('กรุณาใส่เบอรฺ์ติดต่อเฉพาะตัวเลขให้ครบ 10 หลัก');
+        //     this.setState({ InputTel: '' });
+        //     isChkValidate = false
+        // }
+        // else if (this.state.InputTel.substring(0, 1) !== '0') {
+        //     alert('กรุณาใส่เบอรฺ์ติดต่อเริ่มต้นด้วยเลข 0');
+        //     this.setState({ InputTel: '' });
+        //     isChkValidate = false
+        // }
+        // else if (this.state.InputTel.substring(0, 2) === '02') {
+        //     alert('ไม่สามารถใส่เบอรฺ์ติดต่อเริ่มต้นด้วยเลข 02 ได้ กรุณาใส่ข้อมูลใหม่');
+        //     this.setState({ InputTel: '' });
+        //     isChkValidate = false
+        // }
 
         //focus จาก ชื่อ ref
         // this.nameInputRef.focus()
-        if (isChkValidate) this.props.history.push('../sku-summary');
+        if (isChkValidate) {
+            //เอาทั้งหมดยันใส่ store
+            let data = []
+            data.push({
+                "Fullname": this.state.InputName.toString(),
+                "Tel": this.state.InputTel.toString(),
+                "Email": this.state.InputEmail.toString(),
+                "Province": this.state.InputProvince.toString(),
+                "District": this.state.InputDistrict.toString(),
+                "SubDistrict": this.state.InputSubDistrict.toString(),
+                "Zipcode": this.state.InputZipCode.toString(),
+                "Address": this.state.InputAddress.toString(),
+                "Description": this.state.InputDesc.toString(),
+            });
+            this.props.customerAction.setCustomerData(data)
+
+            this.props.history.push('../sku-summary')
+        };
     }
 
     //#region GetInput
-    getName(event) { this.setState({ InputName: event.target.value }) }
-    getTel(event) { this.setState({ InputTel: event.target.value }) }
-    getEmail(event) { this.setState({ InputEmail: event.target.value }) }
-    getInputAddress(event) { this.setState({ InputAddress: event.target.value }) }
-    getDesc(event) { this.setState({ InputDesc: event.target.value }) }
+    getName = (event) =>{ this.setState( { InputName: event.target.value}) }
+    getTel = (event) => { this.setState( { InputTel: event.target.value }) }
+    getEmail = (event) => { this.setState( { InputEmail: event.target.value }) }
+    getInputAddress = (event) => { this.setState( { InputAddress: event.target.value }) }
+    getDesc = (event) => { this.setState( { InputDesc: event.target.value }) }
     //#endregion end GetInput
 
     render() {
@@ -275,127 +335,128 @@ class SkuAddress extends Component {
         const subDistrict = this.state.SubDistrict
         const zipCode = this.state.ZipCode
         return (
-            <div>
-                <TopbarComponents></TopbarComponents>
-                <div className="major-navbar">
-                    {/* <div class="navbar-title"> */}
-                        ที่อยู่สำหรับจัดส่ง
-                {/* </div> */}
+            <React.Fragment>
+                <div className="layout">
+                    <TopbarComponents></TopbarComponents>
+                    <div className="major-navbar">
+                        <div className="navbar-title">
+                            ที่อยู่สำหรับจัดส่ง
                 </div>
-                <div className="button-row">
-                    <a onClick={() => { this.Submit() }}>
-                        <button className="button-primary">
-                            ยืนยัน
+                    </div>
+                    <div className="button-row">
+                            <button className="button-primary" onClick={this.Submit} >
+                                ยืนยัน
                     </button>
-                    </a>
+                    </div>
+                    <div className="content content--scrollable mt-1">
+                        <div className="pizza-address-input">
+                            <input onChange={this.getName} ref={(input) => { this.nameInputRef = input; }} type="text" placeholder="ชื่อ - นามสกุล" />
+                        </div>
+                        <div className="pizza-address-input">
+                            <input onChange={this.getTel} ref={(input) => { this.telInputRef = input; }} type="tel" placeholder="เบอร์ติดต่อ" />
+                        </div>
+                        <div className="pizza-address-input">
+                            <input onChange={this.getEmail} ref={(input) => { this.emailInputRef = input; }} type="email" placeholder="อีเมล" />
+                        </div>
+                        <div className="pizza-address-title">ข้อมูลที่อยู่</div>
+                        <div className="pizza-address-input" >
+                            <React.Fragment>
+                                {province.length === 0 ?
+
+                                    <select><option>จังหวัด</option></select>
+                                    :
+                                    <select onChange={this.GetDistrict}>
+                                        <option>จังหวัด</option>
+                                        {province.map(({
+                                            ProvinceCode,
+                                            ProvinceNameTH,
+                                            ProvinceNameEN,
+                                            Status
+                                        }) =>
+                                            <option key={ProvinceCode} value={ProvinceCode} data={ProvinceNameTH} >{ProvinceNameTH}</option>
+                                        )}
+                                    </select>
+                                }
+
+                            </React.Fragment>
+                        </div>
+                        <div className="pizza-address-input">
+                            <React.Fragment>
+                                {district.length === 0 ?
+
+                                    <select><option>เขต/อำเภอ</option></select>
+                                    :
+                                    <select onChange={this.GetSubDistrict} >
+                                        <option>เขต/อำเภอ</option>
+                                        {district.map(({
+                                            DistrictCode,
+                                            DistrictNameTH,
+                                            DistrictNameEN,
+                                        }) =>
+                                            <option key={DistrictCode} value={DistrictCode}>{DistrictNameTH}</option>
+                                        )}
+                                    </select>
+                                }
+
+                            </React.Fragment>
+                        </div>
+                        <div className="pizza-address-input">
+                            <React.Fragment>
+                                {subDistrict.length === 0 ?
+
+                                    <select><option>แขวง/ตำบล</option></select>
+                                    :
+                                    <select onChange={this.GetZipCode} >
+                                        <option>แขวง/ตำบล</option>
+                                        {subDistrict.map(({
+                                            SubDistrictCode,
+                                            SubDistrictNameTH,
+                                            SubDistrictNameEN,
+                                        }) =>
+                                            <option key={SubDistrictCode} value={SubDistrictCode}>{SubDistrictNameTH}</option>
+                                        )}
+                                    </select>
+                                }
+
+                            </React.Fragment>
+                        </div>
+                        <div className="pizza-address-input">
+                            {zipCode.length === 0 ?
+
+                                <select><option>รหัสไปรษณีย์</option></select>
+                                :
+                                <select onChange={this.GetAll} >
+                                    <option>รหัสไปรษณีย์</option>
+                                    {zipCode.map(({
+                                        ZipCodeID,
+                                        ZipCode,
+                                    }) =>
+                                        <option key={ZipCodeID} value={ZipCodeID}>{ZipCode}</option>
+                                    )}
+
+                                </select>
+                            }
+                        </div>
+                        <div className="pizza-address-input">
+                            <input onChange={this.getInputAddress} ref={(input) => { this.addressInputRef = input; }} type="text" placeholder="บ้านเลขที่" />
+                        </div>
+                        <div className="pizza-address-input">
+                            <textarea onChange={this.getDesc} ref={(input) => { this.descInputRef = input; }} placeholder="อธิบายข้อมูลที่อยู่เพิ่มเติม"></textarea>
+                        </div>
+                    </div>
                 </div>
-                <div className="content content--scrollable">
-                    <div className="pizza-address-title">ข้อมูลลูกค้า</div>
-                    <div className="pizza-address-input">
-                        <input onChange={this.getName} ref={(input) => { this.nameInputRef = input; }} type="text" placeholder="ชื่อ - นามสกุล" />
-                    </div>
-                    <div className="pizza-address-input">
-                        <input onChange={this.getTel} ref={(input) => { this.telInputRef = input; }} type="tel" placeholder="เบอร์ติดต่อ" />
-                    </div>
-                    <div className="pizza-address-input">
-                        <input onChange={this.getEmail} ref={(input) => { this.emailInputRef = input; }} type="email" placeholder="อีเมล" />
-                    </div>
-                    <div className="pizza-address-title">ข้อมูลที่อยู่</div>
-                    <div className="pizza-address-input" >
-                        <React.Fragment>
-                            {province.length === 0 ?
-
-                                <select><option>จังหวัด</option></select>
-                                :
-                                <select onChange={this.GetDistrict} >
-                                    <option>จังหวัด</option>
-                                    {province.map(({
-                                        ProvinceCode,
-                                        ProvinceNameTH,
-                                        ProvinceNameEN,
-                                        Status
-                                    }) =>
-                                        <option key={ProvinceCode} value={ProvinceCode}>{ProvinceNameTH}</option>
-                                    )}
-                                </select>
-                            }
-
-                        </React.Fragment>
-                    </div>
-                    <div className="pizza-address-input">
-                        <React.Fragment>
-                            {district.length === 0 ?
-
-                                <select><option>เขต/อำเภอ</option></select>
-                                :
-                                <select onChange={this.GetSubDistrict} >
-                                    <option>เขต/อำเภอ</option>
-                                    {district.map(({
-                                        DistrictCode,
-                                        DistrictNameTH,
-                                        DistrictNameEN,
-                                    }) =>
-                                        <option key={DistrictCode} value={DistrictCode}>{DistrictNameTH}</option>
-                                    )}
-                                </select>
-                            }
-
-                        </React.Fragment>
-                    </div>
-                    <div className="pizza-address-input">
-                        <React.Fragment>
-                            {subDistrict.length === 0 ?
-
-                                <select><option>แขวง/ตำบล</option></select>
-                                :
-                                <select onChange={this.GetZipCode} >
-                                    <option>แขวง/ตำบล</option>
-                                    {subDistrict.map(({
-                                        SubDistrictCode,
-                                        SubDistrictNameTH,
-                                        SubDistrictNameEN,
-                                    }) =>
-                                        <option key={SubDistrictCode} value={SubDistrictCode}>{SubDistrictNameTH}</option>
-                                    )}
-                                </select>
-                            }
-
-                        </React.Fragment>
-                    </div>
-                    <div className="pizza-address-input">
-                        {zipCode.length === 0 ?
-
-                            <select><option>รหัสไปรษณีย์</option></select>
-                            :
-                            <select >
-                                <option>รหัสไปรษณีย์</option>
-                                {zipCode.map(({
-                                    ZipCodeID,
-                                    ZipCode,
-                                }) =>
-                                    <option key={ZipCodeID} value={ZipCodeID}>{ZipCode}</option>
-                                )}
-
-                            </select>
-                        }
-                    </div>
-                    <div className="pizza-address-input">
-                        <input onChange={this.getInputAddress} ref={(input) => { this.addressInputRef = input; }} type="text" placeholder="บ้านเลขที่" />
-                    </div>
-                    <div className="pizza-address-input">
-                        <textarea onChange={this.getDesc} ref={(input) => { this.descInputRef = input; }} placeholder="อธิบายข้อมูลที่อยู่เพิ่มเติม"></textarea>
-                    </div>
-                </div>
-            </div>
+            </React.Fragment>
         )
     }
 }
 
 const mapStateToProps = state => ({
+    Customer: state.Customer
 })
 
 const mapDispatchToProps = dispatch => ({
-
+    customerAction: bindActionCreators(customerAction, dispatch),
+    pageAction: bindActionCreators(pageAction, dispatch)
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(SkuAddress);

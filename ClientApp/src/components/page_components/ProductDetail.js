@@ -62,7 +62,7 @@ class ProductDetail extends Component {
                     // this.setState({ JsonResponse: data, index: this.state.index + 1 });
                     //this.setState({ productList: data, index: this.state.index });
                     this.props.productAction.setProductList(data);
-                    console.log('Map data is :', this.props.Product.productList)
+                    // console.log('Map data is :', this.props.Product.productList)
                 } else {
                     console.log('response null :', response)
                     {
@@ -80,6 +80,10 @@ class ProductDetail extends Component {
                 console.log("loadData Error", error);
             });
         //console.log('Response Obj :', this.props.Product.productList)
+    }
+
+    monetFormat() {
+        return null
     }
 
     OnClickGoToSummary = () => {
@@ -100,7 +104,7 @@ class ProductDetail extends Component {
 
         return (
             <React.Fragment>
-                <div>
+                <div class="layout">
                     <TopbarComponents></TopbarComponents>
                     <div className="button-row">
                         {/* onClick="location.href='sku-summary.html'" อยู่ใน button */}
@@ -131,10 +135,10 @@ class ProductDetail extends Component {
                                         </div>
 
                                         <div className="sku-product-price">
-                                            {productList.Price} บาท
+                                            {productList.Price.toLocaleString('th-TH')} บาท
                             </div>
 
-                                        <div className="sku-product-remark">
+                                        <div className="sku-product-remark" style={{ padding: '3px 0px' }}>
                                             <span style={{
                                                 color: '#00a6ff',
                                                 fontSize: '8px',
@@ -142,13 +146,13 @@ class ProductDetail extends Component {
                                                 letterSpacing: '-0.2px',
                                                 backgroundColor: '#E3F6FF',
                                                 padding: '2px 4px',
-                                                borderRadius: '1px'
+                                                borderRadius: '1px',
                                             }}>
                                                 * {productList.Remark}
-                                </span>
+                                            </span>
                                         </div>
 
-                                        <div className="sku-product-remark">
+                                        <div className="sku-product-remark" style={{ padding: '3px 0px' }}>
                                             <span style={{
                                                 color: '#15dcab',
                                                 fontSize: '8px',
@@ -171,21 +175,6 @@ class ProductDetail extends Component {
                                         <div className="sku-product-detail-title">รายละเอียดสินค้า</div>
 
                                         <div className="sku-product-detail-content">
-                                            {/* <strong>ประเภทบัตร : 1 วัน ระบุวันเข้าสวนสนุก</strong><br />
-                                        - ท่านจำเป็นต้องระบุวันและสถานที่เข้า จึงจะรับประกันการ
-                                        เข้าสวนสนุก<br />
-                                        - สามารถออก E-Ticket ได้ภายใน 90 วันนับจากวันที่สั่งซื้อ
-                                        ยกตัวอย่างเช่น สั่งซื้อวันที่ 01 มี.ค.62 จะสามารถออก E-Ticket
-                                        ได้ถึงวันที่ 30 พ.ค.62<br />
-                                        - ถ้าลูกค้าไม่สามารถเข้าสวนสนุกตามวันที่ระบุไว้หน้าบัตร
-                                        จะไม่สามารถใช้ตั๋วใบเดิมไปเข้าวันอื่นได้ <br />
-                                        - เมื่อสั่งซื้อสินค้าเรียบร้อยแล้ว กรุณาติดต่อเจ้าหน้าที่ผ่านช่องทาง
-                                        Chat เพื่อแจ้งวันที่ต้องการเข้าสวนสนุก<br />
-                                        - จำเป็นต้องใช้บัตรนี้ในการออก Fast Pass ในสวนสนุก<br />
-                                                <br />
-                                        * หมายเหตุ เมื่อออกบัตรให้เรียบร้อยแล้ว ไม่สามารถ
-                                        เปลี่ยนแปลงได้อีก */}
-
                                             <p dangerouslySetInnerHTML={{ __html: productList.ProductDescTH }} />
                                         </div>
 

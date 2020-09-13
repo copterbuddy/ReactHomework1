@@ -196,7 +196,7 @@ class Home extends Component {
 
             <React.Fragment>
                 {/* <center> */}
-                    <div className='m-2' >
+                    <div>
                         <TopbarComponents topTxt={this.state.topTxt} ></TopbarComponents>
 
                         <div className='main-banner '>
@@ -246,7 +246,7 @@ class Home extends Component {
                                                     <div className={allProductDetailLittle}>
                                                         {ProductNameTH.includes("Test") ? defName : ProductNameTH}
                                                     </div>
-                                                    <div className={allProductPrice}>{ProductNameTH.includes("Test") ? defPrice : Price} บาท</div>
+                                                    <div className={allProductPrice}>{ProductNameTH.includes("Test") ? defPrice.toLocaleString('th-TH') : Price.toLocaleString('th-TH')} บาท</div>
                                                 </div>
                                             </div>
                                         </div>

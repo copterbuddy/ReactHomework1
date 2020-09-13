@@ -1,14 +1,14 @@
 import Action from '../actions';
 
 var initialState = {
-    cusData: []
+    CusData: [],
 };
 
-function Customer(state = initialState,action){
+function Customer(state = initialState, action) {
 
     switch (action.type) {
-        case Action.Set_Cus_Data:
-            return {...state, cusData: action.CusData};
+        case Action.Set_Customer_Data:
+            return { ...state, CusData: action.CusData };
         default:
             return state;
     }
