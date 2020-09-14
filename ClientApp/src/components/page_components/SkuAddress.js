@@ -61,11 +61,11 @@ class SkuAddress extends Component {
         var index = event.nativeEvent.target.selectedIndex;
         const provinceName = event.nativeEvent.target[index].text
 
-        
-        this.setState({ 
+
+        this.setState({
             InputProvinceId: provinceId,
             InputProvince: provinceName
-         })
+        })
 
 
         this.loadData(TYPEADDRESS.GETDISTRICT, provinceId, '', '')
@@ -78,10 +78,10 @@ class SkuAddress extends Component {
         var index = event.nativeEvent.target.selectedIndex;
         const districteName = event.nativeEvent.target[index].text
 
-        this.setState({ 
+        this.setState({
             InputDistrictId: districtId,
             InputDistrict: districteName
-         })
+        })
 
         this.loadData(TYPEADDRESS.GETSUBDISTRICT, '', districtId, '')
     }
@@ -93,22 +93,22 @@ class SkuAddress extends Component {
         var index = event.nativeEvent.target.selectedIndex;
         const subDistrictName = event.nativeEvent.target[index].text
 
-        this.setState({ 
+        this.setState({
             InputSubDistrictId: subDistrictId,
             InputSubDistrict: subDistrictName
-         })
+        })
 
         this.loadData(TYPEADDRESS.GETZIPCODE, this.state.InputProvinceId, this.state.InputDistrictId, subDistrictId)
     }
-    
+
     GetAll = (event) => {
         //getName
         var index = event.nativeEvent.target.selectedIndex;
         const zipCode = event.nativeEvent.target[index].text
 
-        this.setState({ 
+        this.setState({
             InputZipCode: zipCode
-         })
+        })
     }
 
     //#region Call API
@@ -269,51 +269,110 @@ class SkuAddress extends Component {
     }
     //#endregion Call API
 
-    Submit(){
+    IsnullOrEmty(value) {
+        let chkValue = true
+        if (value === undefined || value === '' || value.length === 0 || value === null) chkValue = false
+        return chkValue
+    }
+
+    Submit() {
         let isChkValidate = true
 
-        // const Emailpattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        // const Emailresult = Emailpattern.test(this.state.InputEmail);
+        //Check Require
+        if (isChkValidate) {
+            isChkValidate = this.IsnullOrEmty(this.state.InputName);
+            if (!isChkValidate) {
+                this.refInputName.focus()
+                alert('กรุณาใส่ชื่อ')
+            }
+        }
 
-        // const Mobilepattern = /(([0-9]{3}))*([0-9]{3})*([0-9]{4})/;
-        // const Mobileresult = Mobilepattern.test(this.state.InputTel);
+        if (isChkValidate) {
+            isChkValidate = this.IsnullOrEmty(this.state.InputTel);
+            if (!isChkValidate) {
+                this.refInputTel.focus()
+                alert('กรุณาใส่เบอร์โทรศัพท์')
+            }
+        }
 
-        // if (Emailresult === false) {
-        //     alert('รูปแบบ E-mail ไม่ถูกต้อง กรุณาใส่ข้อมูลใหม่');
-        //     this.setState({ InputEmail: '' });
-        //     isChkValidate = false
-        // }
-        // else if (Mobileresult === false) {
-        //     alert('กรุณาใส่เบอรฺ์ติดต่อเฉพาะตัวเลขให้ครบ 10 หลัก');
-        //     this.setState({ InputTel: '' });
-        //     isChkValidate = false
-        // }
-        // else if (this.state.InputTel.substring(0, 1) !== '0') {
-        //     alert('กรุณาใส่เบอรฺ์ติดต่อเริ่มต้นด้วยเลข 0');
-        //     this.setState({ InputTel: '' });
-        //     isChkValidate = false
-        // }
-        // else if (this.state.InputTel.substring(0, 2) === '02') {
-        //     alert('ไม่สามารถใส่เบอรฺ์ติดต่อเริ่มต้นด้วยเลข 02 ได้ กรุณาใส่ข้อมูลใหม่');
-        //     this.setState({ InputTel: '' });
-        //     isChkValidate = false
-        // }
+        if (isChkValidate) {
+            isChkValidate = this.IsnullOrEmty(this.state.InputEmail);
+            if (!isChkValidate) {
+                this.refInputEmail.focus()
+                alert('กรุณาใส่อีเมล')
+            }
+        }
+
+        if (isChkValidate) {
+            isChkValidate = this.IsnullOrEmty(this.state.InputProvince);
+            if (!isChkValidate)
+                alert('กรุณาเลือกจากหวัด')
+        }
+
+        if (isChkValidate) {
+            isChkValidate = this.IsnullOrEmty(this.state.InputDistrict);
+            if (!isChkValidate)
+                alert('กรุณาเลือกเขต/อำเภอ')
+        }
+
+        if (isChkValidate) {
+            isChkValidate = this.IsnullOrEmty(this.state.InputSubDistrict);
+            if (!isChkValidate)
+                alert('กรุณาเลือกแขวง/ตำบล')
+        }
+
+        if (isChkValidate) {
+            isChkValidate = this.IsnullOrEmty(this.state.InputZipCode);
+            if (!isChkValidate)
+                alert('กรุณาเลือกเลขไปรษณีย์')
+        }
+
+
+        //Check Format
+        if (isChkValidate) {
+            const Emailpattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            const Emailresult = Emailpattern.test(this.state.InputEmail);
+
+            const Mobilepattern = /(([0-9]{3}))*([0-9]{3})*([0-9]{4})/;
+            const Mobileresult = Mobilepattern.test(this.state.InputTel);
+
+            if (Emailresult === false) {
+                alert('รูปแบบ E-mail ไม่ถูกต้อง กรุณาใส่ข้อมูลใหม่');
+                this.setState({ InputEmail: '' });
+                isChkValidate = false
+            }
+            else if (Mobileresult === false) {
+                alert('กรุณาใส่เบอรฺ์ติดต่อเฉพาะตัวเลขให้ครบ 10 หลัก');
+                this.setState({ InputTel: '' });
+                isChkValidate = false
+            }
+            else if (this.state.InputTel.substring(0, 1) !== '0') {
+                alert('กรุณาใส่เบอรฺ์ติดต่อเริ่มต้นด้วยเลข 0');
+                this.setState({ InputTel: '' });
+                isChkValidate = false
+            }
+            else if (this.state.InputTel.substring(0, 2) === '02') {
+                alert('ไม่สามารถใส่เบอรฺ์ติดต่อเริ่มต้นด้วยเลข 02 ได้ กรุณาใส่ข้อมูลใหม่');
+                this.setState({ InputTel: '' });
+                isChkValidate = false
+            }
+        }
 
         //focus จาก ชื่อ ref
         // this.nameInputRef.focus()
+
         if (isChkValidate) {
-            //เอาทั้งหมดยันใส่ store
             let data = []
             data.push({
-                "Fullname": this.state.InputName.toString(),
-                "Tel": this.state.InputTel.toString(),
-                "Email": this.state.InputEmail.toString(),
-                "Province": this.state.InputProvince.toString(),
-                "District": this.state.InputDistrict.toString(),
-                "SubDistrict": this.state.InputSubDistrict.toString(),
-                "Zipcode": this.state.InputZipCode.toString(),
-                "Address": this.state.InputAddress.toString(),
-                "Description": this.state.InputDesc.toString(),
+                "Fullname": this.state.InputName,
+                "Tel": this.state.InputTel,
+                "Email": this.state.InputEmail,
+                "Province": this.state.InputProvince,
+                "District": this.state.InputDistrict,
+                "SubDistrict": this.state.InputSubDistrict,
+                "Zipcode": this.state.InputZipCode,
+                "Address": this.state.InputAddress,
+                "Description": this.state.InputDesc,
             });
             this.props.customerAction.setCustomerData(data)
 
@@ -322,11 +381,11 @@ class SkuAddress extends Component {
     }
 
     //#region GetInput
-    getName = (event) =>{ this.setState( { InputName: event.target.value}) }
-    getTel = (event) => { this.setState( { InputTel: event.target.value }) }
-    getEmail = (event) => { this.setState( { InputEmail: event.target.value }) }
-    getInputAddress = (event) => { this.setState( { InputAddress: event.target.value }) }
-    getDesc = (event) => { this.setState( { InputDesc: event.target.value }) }
+    getName = (event) => { this.setState({ InputName: event.target.value }) }
+    getTel = (event) => { this.setState({ InputTel: event.target.value }) }
+    getEmail = (event) => { this.setState({ InputEmail: event.target.value }) }
+    getInputAddress = (event) => { this.setState({ InputAddress: event.target.value }) }
+    getDesc = (event) => { this.setState({ InputDesc: event.target.value }) }
     //#endregion end GetInput
 
     render() {
@@ -344,19 +403,19 @@ class SkuAddress extends Component {
                 </div>
                     </div>
                     <div className="button-row">
-                            <button className="button-primary" onClick={this.Submit} >
-                                ยืนยัน
+                        <button className="button-primary" onClick={this.Submit} >
+                            ยืนยัน
                     </button>
                     </div>
                     <div className="content content--scrollable mt-1">
                         <div className="pizza-address-input">
-                            <input onChange={this.getName} ref={(input) => { this.nameInputRef = input; }} type="text" placeholder="ชื่อ - นามสกุล" />
+                            <input onChange={this.getName} ref={(input) => { this.refInputName = input; }} type="text" placeholder="ชื่อ - นามสกุล" />
                         </div>
                         <div className="pizza-address-input">
-                            <input onChange={this.getTel} ref={(input) => { this.telInputRef = input; }} type="tel" placeholder="เบอร์ติดต่อ" />
+                            <input onChange={this.getTel} ref={(input) => { this.refInputTel = input; }} type="tel" placeholder="เบอร์ติดต่อ" />
                         </div>
                         <div className="pizza-address-input">
-                            <input onChange={this.getEmail} ref={(input) => { this.emailInputRef = input; }} type="email" placeholder="อีเมล" />
+                            <input onChange={this.getEmail} ref={(input) => { this.refInputEmail = input; }} type="email" placeholder="อีเมล" />
                         </div>
                         <div className="pizza-address-title">ข้อมูลที่อยู่</div>
                         <div className="pizza-address-input" >
@@ -365,7 +424,7 @@ class SkuAddress extends Component {
 
                                     <select><option>จังหวัด</option></select>
                                     :
-                                    <select onChange={this.GetDistrict}>
+                                    <select onChange={this.GetDistrict} ref={(input) => { this.refInputProvince = input; }}  >
                                         <option>จังหวัด</option>
                                         {province.map(({
                                             ProvinceCode,

@@ -11,6 +11,8 @@ import * as productAction from '../../actions/product-action'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
+const defPic = "https://dev.trovefin.com/MKP.Service.Product/images/product/01%20-%20All%20Area/01---All-Area_01.jpg";
+
 class ProductDetail extends Component {
 
     componentDidMount() {
@@ -90,17 +92,12 @@ class ProductDetail extends Component {
         this.props.history.push('../sku-summary');
     }
 
+    setDefault(e) {
+        e.target.src = defPic
+    }
+
     render() {
         const productList = this.props.Product.productList[0];
-        // let index = 0
-
-        // for (let i = 0; i < productList.length; i++) {
-        //     if (productId === productList[i].productId) {
-        //         index = i;
-        //         break;
-        //     }
-
-        // }
 
         return (
             <React.Fragment>
@@ -123,7 +120,7 @@ class ProductDetail extends Component {
 
                                         <div className="sku-product-slider">
                                             <div>
-                                                <img src={productList.ProductImgURL_TH} />
+                                                <img src={productList.ProductImgURL_TH} onError={this.setDefault} />
                                             </div>
                                         </div>
 

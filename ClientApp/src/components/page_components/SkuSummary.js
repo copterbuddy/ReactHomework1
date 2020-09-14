@@ -12,6 +12,8 @@ import * as customerAction from '../../actions/customer-action'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
+const defPic = "https://dev.trovefin.com/MKP.Service.Product/images/product/01%20-%20All%20Area/01---All-Area_01.jpg";
+
 class SkuSummary extends Component {
 
 
@@ -37,7 +39,12 @@ class SkuSummary extends Component {
 
     PriceSummary(price){
         let sum = price - 100
+        if(sum < 0) sum = 0
         return sum.toLocaleString('th-TH')
+    }
+
+    setDefault(e) {
+        e.target.src = defPic
     }
 
     render() {
@@ -72,12 +79,12 @@ class SkuSummary extends Component {
                                     <div className="pizza-address-card-name">
                                         ระบุที่อยู่จัดส่ง
                         </div>
-                                    <a onClick={() => { this.onClickToAddress() }}>
+                                    {/* <a onClick={() => { this.onClickToAddress() }}> */}
 
-                                        <div className="pizza-address-card-action">
+                                        <a className="pizza-address-card-action" href={e => {e.preventDefault()}} onClick={() => { this.onClickToAddress() }} style={{color:'#999999'}}>
                                             เลือกที่อยู่อื่น
-                                </div>
-                                    </a>
+                                </a>
+                                    {/* </a> */}
                                 </React.Fragment> :
                                 // มีที่อยู่
                                 <React.Fragment>
@@ -93,7 +100,7 @@ class SkuSummary extends Component {
                                         Description,
                                     }) =>
 
-                                        <React.Fragment>
+                                        <React.Fragment key={Tel}>
                                             <div className="pizza-address-card-name">
                                                 {Fullname}
                                             </div>
@@ -131,38 +138,6 @@ class SkuSummary extends Component {
                                 // ไม่มีไอเท็ม
                                 <React.Fragment>
                                     <div className="pizza-item-card">
-                                        <div className="pizza-item-card-head">
-                                            {/* <div className="pizza-item-card-image"> */}
-                                            {/* <img src={productList[0].ProductImgURL_TH} /> */}
-                                            {/* </div> */}
-                                            <div className="pizza-item-card-title">
-                                                {/* Tokyo Disney Resort<br />
-                            7-Day Ticket : DisneySea */}
-                                                {/* {productList[0].ProductNameEN} */}
-                                            </div>
-                                            <div className="pizza-item-card-remarks">
-                                                {/* <span style={{
-                                                    color: "#00a6ff",
-                                                    fontSize: "8px",
-                                                    fontWeight: "200",
-                                                    letterSpacing: '-0.2px',
-                                                    backgroundColor: '#E3F6FF',
-                                                    padding: '2px 4px',
-                                                    borderRadius: '1px',
-                                                }}>
-                                                    * {productList[0].Remark}
-                                                </span> */}
-                                            </div>
-                                            <div className="pizza-item-card-commands">
-                                                {/* <a className="pizza-item-card-commands-delete" href="#" onClick={this.deleteProduct}>ลบรายการ</a> */}
-
-                                                <span className="pizza-item-card-commands-detail">รายละเอียดสินค้า</span>
-                                            </div>
-                                            <div className="pizza-item-card-total">
-                                                บาท
-                        </div>
-                                            <div className="pizza-item-card-quantity">จำนวน </div>
-                                        </div>
                                         <div className="pizza-item-card-detail">
                                             <div className="pizza-item-card-detail-text">
                                                 {/* <p dangerouslySetInnerHTML={{ __html: productList[0].ProductDescTH }} /> */}
@@ -194,7 +169,7 @@ class SkuSummary extends Component {
                                     <div className="pizza-item-card">
                                         <div className="pizza-item-card-head">
                                             <div className="pizza-item-card-image">
-                                                <img src={productList[0].ProductImgURL_TH} />
+                                                <img src={productList[0].ProductImgURL_TH} onError={this.setDefault} />
                                             </div>
                                             <div className="pizza-item-card-title">
                                                 {/* Tokyo Disney Resort<br />
@@ -217,9 +192,9 @@ class SkuSummary extends Component {
                                                 </span>
                                             </div>
                                             <div className="pizza-item-card-commands">
-                                                <a className="pizza-item-card-commands-delete" href="#" onClick={this.deleteProduct}>ลบรายการ</a>
+                                                <a className="pizza-item-card-commands-delete" href="#" onClick={this.deleteProduct} style={{color:'#999999'}} >ลบรายการ</a>
                             |
-                            <span className="pizza-item-card-commands-detail">รายละเอียดสินค้า</span>
+                            <a className="pizza-item-card-commands-detail" style={{color:'#999999'}}>รายละเอียดสินค้า</a>
                                             </div>
                                             <div className="pizza-item-card-total">
                                                 {productList[0].Price.toLocaleString('th-TH')} บาท

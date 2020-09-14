@@ -16,12 +16,14 @@ import { bindActionCreators } from 'redux'
 import * as pageAction from '../../actions/page-action'
 import * as productAction from '../../actions/product-action'
 
+const defPic = "https://dev.trovefin.com/MKP.Service.Product/images/product/01%20-%20All%20Area/01---All-Area_01.jpg";
+
 class Home extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            topTxt : 'H.I.S. Service',
+            topTxt: 'H.I.S. Service',
             topBarSrc: require('../assets/image/banner3.jpg'),
             typeSort: 'List',
             txtSearch: '',
@@ -37,6 +39,7 @@ class Home extends Component {
         // bind callback ที่ใช้
         this.getTypeSortCallback = this.getTypeSortCallback.bind(this)
         this.getTxtCallback = this.getTxtCallback.bind(this)
+        //this.setDefault = this.this.setDefault.bind(this)
     }
 
     updateScreenWidth = () => {
@@ -57,8 +60,8 @@ class Home extends Component {
     getTxtCallback(txtSearch) {
 
         if (txtSearch !== undefined) {
-            this.setState({ 
-                txtSearch: txtSearch ,
+            this.setState({
+                txtSearch: txtSearch,
                 txtNoData: 'Loading...'
             })
 
@@ -83,7 +86,7 @@ class Home extends Component {
 
     }
 
-    OnClickChooseProduct = (products, productID) => {
+    OnClickChooseProduct = (productID) => {
         // this.props.productAction.setProductList(products);
         this.props.productAction.setProductID(productID);
         this.props.history.push('../product-detail');
@@ -111,9 +114,11 @@ class Home extends Component {
                 else {
                     let data = this.state.JsonResponse;
                     if (response.data.products.length !== 0) {
-                        {this.setState({
-                            txtNoData: 'Loading...'
-                        })}
+                        {
+                            this.setState({
+                                txtNoData: 'Loading...'
+                            })
+                        }
 
                         for (let i = 0; i < response.data.products.length; i++)
                             data.push({
@@ -132,9 +137,11 @@ class Home extends Component {
                         this.setState({ JsonResponse: data, index: this.state.index });
                     } else {
                         console.log('response null :', response)
-                        {this.setState({
-                            txtNoData: 'ไม่พบสินค้า'
-                        })}
+                        {
+                            this.setState({
+                                txtNoData: 'ไม่พบสินค้า'
+                            })
+                        }
                     }
                 }
             } else {
@@ -175,15 +182,16 @@ class Home extends Component {
         return txtSearch
     }
 
+    setDefault(e) {
+        e.target.src = defPic
+    }
 
     render() {
 
 
         const products = this.state.JsonResponse;
         const screenWidth = this.state.screenWidth;
-        const defPic = "https://dev.trovefin.com/MKP.Service.Product/images/product/01%20-%20All%20Area/01---All-Area_01.jpg";
-        const defName = "Japan Rail Pass (All Area) Ordinary Car (7 Days)";
-        const defPrice = "7999";
+
 
         const allProductSort = this.state.typeSort == 'List' ? 'mylist-products' : 'productlist-products';
         const productSort = this.state.typeSort == 'List' ? 'mylist-product' : 'productlist-product';
@@ -196,33 +204,33 @@ class Home extends Component {
 
             <React.Fragment>
                 {/* <center> */}
-                    <div>
-                        <TopbarComponents topTxt={this.state.topTxt} ></TopbarComponents>
+                <div>
+                    <TopbarComponents topTxt={this.state.topTxt} ></TopbarComponents>
 
-                        <div className='main-banner '>
-                            <img src={this.state.topBarSrc} style={{ width: '-webkit-fill-available' }} />
-                        </div>
+                    <div className='main-banner '>
+                        <img src={this.state.topBarSrc} style={{ width: '-webkit-fill-available' }} />
+                    </div>
 
-                        <div className='mt-3'>
+                    <div className='mt-3'>
                         <SearchTabComponent
                             topbarText={this.state.TopbarText}
                             txtSearch={this.getTxtCallback}
                         />
-                        </div>
+                    </div>
 
-                        <div className='mt-3'>
+                    <div className='mt-3'>
                         <SortBarComponent
                             textHeadSort={'สินค้าทั้งหมด(' + products.length + ')'}
                             sortCallback={this.getTypeSortCallback}
                         />
-                        </div>
+                    </div>
 
-                        <div className='mt-2'>
+                    <div className='mt-2'>
                         {products.length === 0 ? <h3>{this.state.txtNoData}</h3>
                             :
                             <React.Fragment>
                                 <div
-                                    className={"mt-4 "+allProductSort}
+                                    className={"mt-4 " + allProductSort}
                                     // style={{ borderWidth : '2px'}}>
                                     style={{ gridTemplateColumns: screenWidth <= 500 }}>
                                     {products.map(({
@@ -237,16 +245,18 @@ class Home extends Component {
                                         ProductImgURL_TH,
                                         SKU_ID
                                     }) =>
-                                        <div key={ProductID}  onClick={() => { this.OnClickChooseProduct(products, ProductID) }} >
+                                        <div key={ProductID} onClick={() => { this.OnClickChooseProduct(ProductID) }} >
                                             <div className={productSort}>
                                                 <div className={allImageSort}>
-                                                    <img src={ProductNameTH.includes("Test") ? defPic : ProductImgURL_TH}  />
+                                                    {/* <img src={ProductNameTH.includes("Test") ? defPic : ProductImgURL_TH}  /> */}
+                                                    <img src={ProductImgURL_TH} onError={this.setDefault} />
+
                                                 </div>
                                                 <div className={allProductDetail}>
                                                     <div className={allProductDetailLittle}>
-                                                        {ProductNameTH.includes("Test") ? defName : ProductNameTH}
+                                                        {ProductNameTH}
                                                     </div>
-                                                    <div className={allProductPrice}>{ProductNameTH.includes("Test") ? defPrice.toLocaleString('th-TH') : Price.toLocaleString('th-TH')} บาท</div>
+                                                    <div className={allProductPrice}>{Price.toLocaleString('th-TH')} บาท</div>
                                                 </div>
                                             </div>
                                         </div>
@@ -254,8 +264,8 @@ class Home extends Component {
                                 </div>
                             </React.Fragment>
                         }
-                        </div>
                     </div>
+                </div>
                 {/* </center> */}
             </React.Fragment>
 
